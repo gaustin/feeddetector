@@ -8,16 +8,26 @@ class FeedDetector
   # for example: http://blog.dominiek.com/ => http://blog.dominiek.com/feed/atom.xml
   # only_detect can force detection of :rss or :atom
   # if nil is returned the has no discernible feed url -- perhaps because it's the feed url
-  def self.fetch_feed_url(page_url, only_detect=nil)
-    if page_url =~ /^http:\/\//
-      @html = open(page_url).read
+
+  def self.url_from_string(url)
+    if url =~ /^http:\/\//
+      url
     else
-      @html = open("http://#{page_url}").read
+      "http://#{page_url}"
     end
+  end
+  
+  def self.fetch_feed_url(page_url, only_detect=nil)
+    @html = open(self.url_from_string(page_url)).read
     
     feed_url = self.get_feed_path(@html, only_detect)
-    feed_url = "http://#{host_with_port}/#{feed_url.gsub(/^\//, '')}" unless !feed_url || feed_url =~ /^http:\/\// 
+    feed_url = feed_url unless !feed_url || feed_url =~ /^http:\/\// 
     feed_url
+  end
+
+  def self.fetch_feed_from_xml(xml, only_detect)
+      feed = FeedParser.parse(@html)
+      feed_url = feed.url if feed.version =~ /^#{only_detect}\d*/ 
   end
 
   ##
@@ -41,11 +51,7 @@ class FeedDetector
   end
 
   def self.detect(url, only_detect=nil)
-    feed_url = self.fetch_feed_url(url, only_detect)
-    if feed_url.nil?
-      feed = FeedParser.parse(@html)
-      feed_url = feed.url if feed.version =~ /^#{only_detect}\d*/ 
-    end
+    feed_url = self.fetch_feed_url(url, only_detect) || self.fetch_feed_from_xml(@html, only_detect)
     feed_url
   end
 end
