@@ -18,13 +18,6 @@ class FeedDetectorTest < Test::Unit::TestCase
     feed_path = FeedDetector.detect(@wordpress_page_url, :atom)
     assert_equal(nil, feed_path)
     
-    # the feed itself
-    #feed_path = FeedDetector.detect(@wordpress_feed_url)
-    #assert_equal(@wordpress_feed_url, feed_path)
-    #feed_path = FeedDetector.detect(@wordpress_feed_url, :atom)
-    #assert_equal(@wordpress_feed_url, feed_path)
-    #feed_path = FeedDetector.detect(@wordpress_feed_url, :rss)
-    #assert_equal(nil, feed_path)
   end
   
   def test_wordpress_only_detect
