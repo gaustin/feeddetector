@@ -1,6 +1,8 @@
 require 'test/unit'
 require 'feed_detector'
 
+#GRANTTODO: Refactor this into something like a template method pattern.
+
 class FeedDetectorTest < Test::Unit::TestCase
   def setup
     @body = []
@@ -50,7 +52,7 @@ class FeedDetectorTest < Test::Unit::TestCase
   def test_blogger
     make_head(make_blogger_html)
     feed_path = FeedDetector.get_feed_path(@body.join("\n"))
-    assert [@blogger_atom_url, @blogger_other_atom_url, @blogger_rss_url, @blogger_page_url].include?(feed_path)
+    assert [@blogger_atom_url, @blogger_other_atom_url, @blogger_rss_url].include?(feed_path)
   end
   
   def test_wordpress_only_detect_net
