@@ -4,7 +4,7 @@ require 'feed_detector'
 class FeedDetectorTest < Test::Unit::TestCase
   def setup
     @body = []
-    make_default_body
+    make_default_html
     @default_feed_url = 'http://giftedslacker.com/feed/'
     @default_page_url = 'http://giftedslacker.com/'
   end
@@ -27,7 +27,7 @@ class FeedDetectorTest < Test::Unit::TestCase
     assert_equal(nil, feed_path)
   end
   def test_wordpress_only_detect
-    make_wordpress_body
+    make_wordpress_html
     feed_path = FeedDetector.get_feed_path(@body.join("\n"), :atom)
     assert_equal(nil, feed_path)
     feed_path = FeedDetector.get_feed_path(@body.join("\n"), :rss)
@@ -35,7 +35,7 @@ class FeedDetectorTest < Test::Unit::TestCase
   end
   
   def test_wordpress
-    make_wordpress_body
+    make_wordpress_html
     feed_path = FeedDetector.get_feed_path(@body.join("\n"))   
     assert_equal(@default_feed_url, feed_path)
   end
@@ -56,7 +56,7 @@ class FeedDetectorTest < Test::Unit::TestCase
   
 private
 
-  def make_wordpress_body
+  def make_wordpress_html
     @body = []
     @body << ' <html>'
     @body << '  <head>'
@@ -66,7 +66,7 @@ private
     @body << ' </html>'
   end
   
-  def make_default_body
+  def make_default_html
     @body = []
     @body << ' <html>'
     @body << '  <head>'
