@@ -1,0 +1,11 @@
+Modification of the feed detector done by http://dominiek.com/articles/2007/6/22/detecting-atom-rss-feeds-in-ruby.
+
+Basically it returns all the feeds that it find not just one...
+
+Usage:
+
+FeedDetector.fetch_feed_url('http://www.rubycorner.com')
+
+returns:
+
+["http://www.rubycorner.com/feeds/updated/atom10", "http://www.rubycorner.com/feeds/updated/rss20"]
