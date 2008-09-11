@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'open-uri'
-require 'rfeedparser'
+
 
 class FeedDetector
   ##
@@ -13,7 +13,7 @@ class FeedDetector
     if url =~ /^http:\/\//
       url
     else
-      "http://#{page_url}"
+      "http://#{url}"
     end
   end
   
@@ -23,11 +23,6 @@ class FeedDetector
     feed_url = self.get_feed_path(@html, only_detect)
     feed_url = feed_url unless !feed_url || feed_url =~ /^http:\/\// 
     feed_url
-  end
-
-  def self.fetch_feed_from_xml(xml, only_detect)
-      feed = FeedParser.parse(@html)
-      feed_url = feed.url if feed.version =~ /^#{only_detect}\d*/ 
   end
 
   ##
