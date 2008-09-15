@@ -1,6 +1,4 @@
-require 'rubygems'
 require 'open-uri'
-require 'rfeedparser'
 
 class FeedDetector
   ##
@@ -10,24 +8,20 @@ class FeedDetector
   # if nil is returned the has no discernible feed url -- perhaps because it's the feed url
 
   def self.url_from_string(url)
+    
     if url =~ /^http:\/\//
       url
     else
-      "http://#{page_url}"
+      "http://#{url}"
     end
+    
   end
   
   def self.fetch_feed_url(page_url, only_detect=nil)
-    @html = open(self.url_from_string(page_url)).read
     
+    @html = open(self.url_from_string(page_url)).read
     feed_url = self.get_feed_path(@html, only_detect)
-    feed_url = feed_url unless !feed_url || feed_url =~ /^http:\/\// 
-    feed_url
-  end
 
-  def self.fetch_feed_from_xml(xml, only_detect)
-      feed = FeedParser.parse(@html)
-      feed_url = feed.url if feed.version =~ /^#{only_detect}\d*/ 
   end
 
   ##
@@ -39,19 +33,42 @@ class FeedDetector
   # => /feed/atom.xml
   # only_detect can force detection of :rss or :atom
   def self.get_feed_path(html, only_detect=nil)
+    
+    matches =[]
+    
     unless only_detect && only_detect != :atom
-      md ||= /<link.*href=['"]*([^\s'"]+)['"]*.*application\/atom\+xml.*>/.match(html) 
-      md ||= /<link.*application\/atom\+xml.*href=['"]*([^\s'"]+)['"]*.*>/.match(html) 
+      
+      matches |= html.scan(/<link.*href=['"]*([^\s'"]+)['"]*.*application\/atom\+xml.*>/)
+      matches |= html.scan(/<link.*application\/atom\+xml.*href=['"]*([^\s'"]+)['"]*.*>/)
+      #matches |=  atom_feed
+      
     end
+    
     unless only_detect && only_detect != :rss
-      md ||= /<link.*href=['"]*([^\s'"]+)['"]*.*application\/rss\+xml.*>/.match(html) 
-      md ||= /<link.*application\/rss\+xml.*href=['"]*([^\s'"]+)['"]*.*>/.match(html) 
+      
+      matches |= html.scan(/<link.*href=['"]*([^\s'"]+)['"]*.*application\/rss\+xml.*>/)
+      matches |= html.scan(/<link.*application\/rss\+xml.*href=['"]*([^\s'"]+)['"]*.*>/)
+    #  matches |= rss_feed
+      
     end
-    md && md[1]
+    
+
+    flatted_matches = matches.inject([]) do |acum,match_array| 
+    
+      match_array.each {|match| acum << match}
+      acum
+    
+    end
+    
+    flatted_matches
+  
   end
 
   def self.detect(url, only_detect=nil)
+
     feed_url = self.fetch_feed_url(url, only_detect) || self.fetch_feed_from_xml(@html, only_detect)
     feed_url
+
   end
+  
 end
