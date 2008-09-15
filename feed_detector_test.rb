@@ -52,7 +52,15 @@ class FeedDetectorTest < Test::Unit::TestCase
   def test_blogger
     make_head(make_blogger_html)
     feed_path = FeedDetector.get_feed_path(@body.join("\n"))
-    assert [@blogger_atom_url, @blogger_other_atom_url, @blogger_rss_url].include?(feed_path)
+    assert [@blogger_atom_url, @blogger_other_atom_url, @blogger_rss_url].include? feed_path 
+  end
+  
+  def test_blogger_only_detect
+    make_head(make_blogger_html)
+    feed_path = FeedDetector.get_feed_path(@body.join("\n"), :atom)
+    assert [@blogger_atom_url, @blogger_other_atom_url].include? feed_path
+    feed_path = FeedDetector.get_feed_path(@body.join("\n"), :rss)
+    assert_equal(@blogger_rss_url, feed_path)
   end
   
   def test_wordpress_only_detect_net
