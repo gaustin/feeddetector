@@ -63,12 +63,12 @@ class FeedDetector
     flatted_matches
   
   end
-
-  def self.detect(url, only_detect=nil)
-
-    feed_url = self.fetch_feed_url(url, only_detect) || self.fetch_feed_from_xml(@html, only_detect)
-    feed_url
-
-  end
+  ### This is not working right now
+  # def self.detect(url, only_detect=nil)
+  # 
+  #   feed_url = self.fetch_feed_url(url, only_detect) || self.fetch_feed_from_xml(@html, only_detect)
+  #   feed_url
+  # 
+  # end
   
 end
