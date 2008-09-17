@@ -31,7 +31,7 @@ class FeedDetector
   # only_detect can force detection of :rss or :atom
   def self.get_feed_path(html, only_detect=nil)
     matches =[]
-    
+
     unless only_detect && only_detect != :atom
       matches |= html.scan(/<link.*href=['"]*([^\s'"]+)['"]*.*application\/atom\+xml.*>/)
       matches |= html.scan(/<link.*application\/atom\+xml.*href=['"]*([^\s'"]+)['"]*.*>/)
@@ -44,8 +44,8 @@ class FeedDetector
     #  matches |= rss_feed
     end
 
-    flatted_matches = matches.flatten
-    flatted_matches
+    flattened_matches = matches.flatten
+    flattened_matches
   end
   
   ### This is not working right now
