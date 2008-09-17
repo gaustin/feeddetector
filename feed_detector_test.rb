@@ -1,8 +1,6 @@
 require 'test/unit'
 require 'feed_detector'
 
-#GRANTTODO: Refactor this into something like a template method pattern.
-
 class FeedDetectorTest < Test::Unit::TestCase
   def setup
     @body = []
@@ -100,52 +98,7 @@ class FeedDetectorTest < Test::Unit::TestCase
     assert_equal(["http://www.hasmanydevelopers.com/atom.xml"], feed_paths)
   end
   
-  def test_wordpress_detect
-
-    
-  end
-  
-  def test_wordpress_only_detect
-    # make_head(make_wordpress_html)
-        # feed_path = FeedDetector.fetch_feed_url(@body.join("\n"), :atom)
-        #  assert_equal([], feed_path)
-        #  feed_path = FeedDetector.fetch_feed_url(@body.join("\n"), :rss)
-        #  assert_equal([@wordpress_atom_url], feed_path)
-  end
-  
-  def test_wordpress
-    # make_head(make_wordpress_html)
-    # feed_path = FeedDetector.get_feed_path(@body.join("\n"))   
-    # assert_equal(@wordpress_atom_url, feed_path)
-  end
-  
-  def test_blogger
-    # make_head(make_blogger_html)
-    # feed_path = FeedDetector.get_feed_path(@body.join("\n"))
-    # assert [@blogger_atom_url, @blogger_other_atom_url, @blogger_rss_url].include? feed_path 
-  end
-  
-  def test_blogger_only_detect
-    # make_head(make_blogger_html)
-    # feed_path = FeedDetector.get_feed_path(@body.join("\n"), :atom)
-    # assert [@blogger_atom_url, @blogger_other_atom_url].include? feed_path
-    # feed_path = FeedDetector.get_feed_path(@body.join("\n"), :rss)
-    # assert_equal(@blogger_rss_url, feed_path)
-  end
-  
-  def test_wordpress_only_detect_net
-    # feed_path = FeedDetector.fetch_feed_url(@wordpress_page_url, :atom)
-    # assert_equal(nil, feed_path)
-    # feed_path = FeedDetector.fetch_feed_url(@wordpress_page_url, :rss)
-    # assert_equal(@wordpress_atom_url, feed_path)
-  end
-  
-  def test_wordpress_net
-    # feed_path = FeedDetector.fetch_feed_url(@wordpress_page_url)
-    # assert_equal(@wordpress_atom_url, feed_path)
-  end
-  
-  #TODO: add tests for malformed urls and pages without a feed
+  #TODO: add tests for malformed urls
 
 private  
   def multi_feed_html(spec)
