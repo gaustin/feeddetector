@@ -22,21 +22,22 @@ class FeedDetectorTest < Test::Unit::TestCase
   
   def test_wordpress_detect
     #page containing a single feed pointer
-      feed_path = FeedDetector.fetch_feed_url(@wordpress_single_feed_page_url)
-      assert_equal([@wordpress_atom_url], feed_path)
-      feed_path = FeedDetector.fetch_feed_url(@wordpress_single_feed_page_url, :rss)
-      assert_equal([@wordpress_atom_url], feed_path)
-      feed_path = FeedDetector.fetch_feed_url(@wordpress_single_feed_page_url, :atom)
-      assert_equal([], feed_path)
+    feed_path = FeedDetector.fetch_feed_url(@wordpress_single_feed_page_url)
+    assert_equal([@wordpress_atom_url], feed_path)
+    feed_path = FeedDetector.fetch_feed_url(@wordpress_single_feed_page_url, :rss)
+    assert_equal([@wordpress_atom_url], feed_path)
+    feed_path = FeedDetector.fetch_feed_url(@wordpress_single_feed_page_url, :atom)
+    assert_equal([], feed_path)
+    
     #page containing several feed pointers   
     
-      feed_path = FeedDetector.fetch_feed_url(@wordpress_several_feed_page_url)
-       assert_equal(["http://www.hasmanydevelopers.com/atom.xml",
-        "http://www.hasmanydevelopers.com/rss.xml"], feed_path)
-       feed_path = FeedDetector.fetch_feed_url(@wordpress_several_feed_page_url, :rss)
-       assert_equal(["http://www.hasmanydevelopers.com/rss.xml"], feed_path)
-       feed_path = FeedDetector.fetch_feed_url(@wordpress_several_feed_page_url, :atom)
-       assert_equal(["http://www.hasmanydevelopers.com/atom.xml"], feed_path)
+    feed_path = FeedDetector.fetch_feed_url(@wordpress_several_feed_page_url)
+    assert_equal(["http://www.hasmanydevelopers.com/atom.xml",
+                  "http://www.hasmanydevelopers.com/rss.xml"], feed_path)
+    feed_path = FeedDetector.fetch_feed_url(@wordpress_several_feed_page_url, :rss)
+    assert_equal(["http://www.hasmanydevelopers.com/rss.xml"], feed_path)
+    feed_path = FeedDetector.fetch_feed_url(@wordpress_several_feed_page_url, :atom)
+    assert_equal(["http://www.hasmanydevelopers.com/atom.xml"], feed_path)
     
     
     
