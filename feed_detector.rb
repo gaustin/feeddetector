@@ -15,7 +15,7 @@ class FeedDetector
     end
   end
   
-  def self.fetch_feed_url(page_url, only_detect=nil)  
+  def self.fetch_feed_urls(page_url, only_detect=nil)  
     @html = open(self.url_from_string(page_url)).read
     feed_url = self.get_feed_path(@html, only_detect)
     feed_url
@@ -29,7 +29,7 @@ class FeedDetector
   # ...
   # => /feed/atom.xml
   # only_detect can force detection of :rss or :atom
-  def self.get_feed_path(html, only_detect=nil)
+  def self.get_feed_paths(html, only_detect=nil)
     matches =[]
 
     unless only_detect && only_detect != :atom
