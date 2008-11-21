@@ -35,12 +35,12 @@ class FeedDetectorTest < Test::Unit::TestCase
 
     # page containing several feeds
     html = make_html(multi_feed_html).join("\n")
-    feed_paths = FeedDetector.get_feed_paths(html)    
-    assert_equal(["http://ethandraws.blogspot.com/feeds/posts/default",
-                  "http://www.blogger.com/feeds/21351008/posts/default",
+    feed_paths = FeedDetector.get_feed_paths(html)
+    assert_equal(["/feed/blog.xml",
+                  "http://ethandraws.blogspot.com/feeds/posts/default",
                   "http://ethandraws.blogspot.com/feeds/posts/default?alt=rss",
                   "http://giftedslacker.com/feed/",
-                  "/feed/atom.xml"], feed_paths)    
+                  "http://www.blogger.com/feeds/21351008/posts/default"], feed_paths.sort)
   end
   
   def test_get_feed_paths_with_only_detect
@@ -67,16 +67,16 @@ class FeedDetectorTest < Test::Unit::TestCase
     # page containing several feeds w/rss
     html = make_html(multi_feed_html(:rss)).join("\n")
     feed_paths = FeedDetector.get_feed_paths(html, :rss)    
-    assert_equal(["http://ethandraws.blogspot.com/feeds/posts/default?alt=rss",
-                  "http://giftedslacker.com/feed/",
-                  "/feed/blog.xml"], feed_paths)
+    assert_equal(["/feed/blog.xml",
+                  "http://ethandraws.blogspot.com/feeds/posts/default?alt=rss",
+                  "http://giftedslacker.com/feed/"], feed_paths.sort)
                   
     # page containing several feeds w/atom
     html = make_html(multi_feed_html(:atom)).join("\n")
     feed_paths = FeedDetector.get_feed_paths(html, :atom)    
-    assert_equal(["http://ethandraws.blogspot.com/feeds/posts/default",
-                  "http://www.blogger.com/feeds/21351008/posts/default",
-                  "/feed/atom.xml"], feed_paths)
+    assert_equal(["/feed/atom.xml",
+                  "http://ethandraws.blogspot.com/feeds/posts/default",
+                  "http://www.blogger.com/feeds/21351008/posts/default"], feed_paths.sort)
   end
   
   def test_fetch_feed_urls
@@ -101,7 +101,7 @@ class FeedDetectorTest < Test::Unit::TestCase
   #TODO: add tests for malformed urls
 
 private  
-  def multi_feed_html(spec)
+  def multi_feed_html(spec=:rss)
     body = []
     body << '   <link rel="alternate" type="application/atom+xml" title="Ethan Draws - Atom" href="http://ethandraws.blogspot.com/feeds/posts/default" />'
     body << '   <link rel="service.post" type="application/atom+xml" title="Ethan Draws - Atom" href="http://www.blogger.com/feeds/21351008/posts/default" />'    

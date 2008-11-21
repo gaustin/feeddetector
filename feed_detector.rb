@@ -17,8 +17,8 @@ class FeedDetector
   
   def self.fetch_feed_urls(page_url, only_detect=nil)  
     @html = open(self.url_from_string(page_url)).read
-    feed_url = self.get_feed_path(@html, only_detect)
-    feed_url
+    feed_urls = self.get_feed_paths(@html, only_detect)
+    feed_urls
   end
 
   ##
