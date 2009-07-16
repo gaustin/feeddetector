@@ -14,11 +14,23 @@ class FeedDetector
       "http://#{url}"
     end
   end
+
+  ## converts relative urls to absolute urls
+  def self.to_absolute_url(page_url,feed_url)
+    if feed_url =~ /^http:\/\// ## if its absolute
+      feed_url
+    elsif feed_url =~ /^\//  ## relative to the host root ## '/some_dir_from_root/feed.xml'
+      "http://#{URI.parse(page_url).host.to_s + feed_url}"
+    else  ## relative to the page path ## 'feed.xml'
+      feed_path = page_url.scan(/^(http:\/\/[^\/]+)((?:\/[^\/]+)+(?=\/))?\/?(?:[^\/]+)?$/i).to_s
+      feed_path +'/'+ feed_url
+    end
+  end
   
   def self.fetch_feed_urls(page_url, only_detect=nil)  
     @html = open(self.url_from_string(page_url)).read
     feed_urls = self.get_feed_paths(@html, only_detect)
-    feed_urls
+    feed_urls.map { |feed_url| self.to_absolute_url(page_url, feed_url) }
   end
 
   ##
