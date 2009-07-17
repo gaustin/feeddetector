@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'timeout'
 
 class FeedDetector
   ##
@@ -27,9 +28,21 @@ class FeedDetector
     end
   end
   
-  def self.fetch_feed_urls(page_url, only_detect=nil)  
-    @html = open(self.url_from_string(page_url)).read
-    feed_urls = self.get_feed_paths(@html, only_detect)
+  def self.fetch_feed_urls(page_url, only_detect=nil)
+    retries = 3 ## default retries
+    begin
+      Timeout::timeout(5){ ## default timeout 5 secs
+        html = open(self.url_from_string(page_url)).read
+      }
+    rescue Timeout::Error
+      retries -= 1
+      if retries > 0
+        sleep 0.42 and retry
+      else
+        raise
+      end
+    end
+    feed_urls = self.get_feed_paths(html, only_detect)
     feed_urls.map { |feed_url| self.to_absolute_url(page_url, feed_url) }
   end
 
