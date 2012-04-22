@@ -9,3 +9,7 @@ FeedDetector.fetch_feed_urls('http://www.rubycorner.com')
 returns:
 
 ["http://www.rubycorner.com/feeds/updated/atom10", "http://www.rubycorner.com/feeds/updated/rss20"]
+
+TODO:
+* Decouple parsing and retrieving data.
+* Tests should not depend on data retrieved from the web taking a particular form.
